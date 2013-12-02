@@ -17,7 +17,7 @@ namespace Peli.Scenes
         public MenuScene()
             :base()
         {
-            button1 = new Button(Resources.GetTexture("boss_bullet"), new Vector2(400, 200));
+            button1 = new Button(Resources.GetTexture("random"), new Vector2(400, 200),"nappi :DD",Resources.GetFont("font"));
             button1.onButtonPressed += onButtonPress;
         }
 

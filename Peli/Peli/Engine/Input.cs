@@ -15,22 +15,34 @@ namespace Peli.Engine
 
         public static void UpdateState()
         {
+            //git extensions
             checkCheat();
             k_state_old = k_state;
             k_state = Keyboard.GetState();
             m_state_old = m_state;
             m_state = Mouse.GetState();
         }
+        public static bool isCheat()
+        {
+            if (lastkeys.Contains("THERE IS NO URF LEVEL"))
+            {
+                lastkeys = "";
+                return true;
+            }
+            return false;
+
+        }
         public static void checkCheat()
         {
-            if (lastkeys.Count() > 30)
-                Console.WriteLine("sad");
             Keys[] cheats = { Keys.T, Keys.H, Keys.E, Keys.R, Keys.I, Keys.S, Keys.N, Keys.O, Keys.Space, Keys.U, Keys.F, Keys.L, Keys.V };
             string[] strings = { "T", "H", "E", "R", "I", "S", "N", "O", " ", "U", "F", "L", "V" };
             for (int i = 0; i < cheats.Count(); i++)
             {
+                if (lastkeys.Length >= 22)
+                    lastkeys.Remove(0);
                 if (IsKeyPressed(cheats[i]))
                     lastkeys += strings[i];
+               
             }
         }
         public static Boolean IsKeyDown(Keys key)

@@ -24,6 +24,7 @@ namespace Peli
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Sprite isku_sprite;
+        public static Camera camera;
         public static Rectangle screen_size
         {
             get;
@@ -65,6 +66,7 @@ namespace Peli
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            camera = new Camera(graphics);
             Resources.Init(Content);
             DrawSys.InitSpriteBatch(spriteBatch);
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -77,6 +79,7 @@ namespace Peli
             Resources.LoadFont("font");
             Resources.LoadTexture2D("sky");
             Resources.LoadTexture2D("boss_bullet");
+            Resources.LoadTexture2D("random");
             isku_sprite = new Sprite(Resources.GetTexture("isku"), 193, 500, 10, 100f);
             SceneSys.ChangeScene(new GameScene());
             // TODO: use this.Content to load your game content here
@@ -106,6 +109,10 @@ namespace Peli
             // Allows the game to exit
             if (Input.IsKeyDown(Keys.Escape))
                 this.Exit();
+            if(Input.IsKeyDown(Keys.P))
+                camera.addZoom(dT);
+            if (Input.IsKeyDown(Keys.K))
+                camera.addZoom(-dT);
             SceneSys.Update(dT);
 
             // TODO: Add your update logic here
@@ -121,7 +128,14 @@ namespace Peli
         {
            // GraphicsDevice.Clear(Color.AliceBlue);
             float dT = gameTime.ElapsedGameTime.Milliseconds * 0.001f;
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate,
+                BlendState.AlphaBlend,
+                SamplerState.LinearClamp,
+                DepthStencilState.None,
+                RasterizerState.CullCounterClockwise,
+                null,
+                camera.update()
+                );
             SceneSys.Draw(dT);
            //GraphicsDevice.Clear(väri);
             //isku_sprite.Draw(player.Position);

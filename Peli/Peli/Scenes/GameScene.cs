@@ -43,6 +43,10 @@ namespace Peli.Scenes
 
             color_change = new Timer(1000);
             font_color_change = new Timer(100);
+            Game1.camera.addZoom(0.5f);
+            Vector2 offset = new Vector2(Game1.screen_size.Width, Game1.screen_size.Height) * 0.5f;
+            Game1.camera.PositionOffset = offset;
+            Game1.camera.setOffset(offset);
         }
 
 
@@ -50,6 +54,8 @@ namespace Peli.Scenes
         {
             Console.WriteLine("Enemy amount: " + enemies.Count + "\nBullet amount: " + bullets.Count);
             Console.WriteLine("Enemies killed: " + killed);
+            if (Input.isCheat())
+                cheat = !cheat;
             if (Input.IsKeyPressed(Keys.M))
             {
                 SceneSys.PauseCurrentScene(true);
@@ -57,8 +63,6 @@ namespace Peli.Scenes
             }
             if (!player.IsDead)
             {
-                if (Input.IsKeyPressed(Keys.C))
-                    cheat = !cheat;
                 if (!cheat)
                 {
                     if (Input.IsKeyPressed(Keys.Space))
@@ -218,6 +222,18 @@ namespace Peli.Scenes
             //isku_sprite.Update(dT);
             background1.Update(dT);
             background2.Update(dT);
+            Game1.camera.Position = player.Position;
+            Vector2 offset = Game1.camera.PositionOffset / Game1.camera.getZoom();
+            if (Game1.camera.Position.X < offset.X)
+                Game1.camera.Position.X = offset.X;
+            if (Game1.camera.Position.X > Game1.screen_size.Width - offset.X)
+                Game1.camera.Position.X = Game1.screen_size.Width - offset.X;
+
+            if (Game1.camera.Position.Y < offset.Y)
+                Game1.camera.Position.Y = offset.Y;
+            if (Game1.camera.Position.Y > Game1.screen_size.Width - offset.Y)
+                Game1.camera.Position.Y = Game1.screen_size.Width - offset.Y;
+
         }
         public override void Draw(float deltaTime)
         {
